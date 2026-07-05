@@ -1,225 +1,162 @@
-# React Retail (Starter Project)
+# React Retail
 
-This project is the starting point for building your **React Retail** capstone application in the **Intermediate React** course.
-
-The starter code gives you:
-
-- A minimal React app created with Vite
-- A mock API server that returns a list of products
-- A simple grid view that renders products on the page using basic `fetch`
-
-Everything else (routing, cart behavior, auth, React Query, checkout flow, tests, etc.) is up to you to design and implement.
+A fully functional e-commerce frontend built as the **Intermediate React** capstone project. React Retail simulates a small online store where users can browse products, add items to a cart, sign in, and complete a checkout flow through a mock API.
 
 ---
 
-## 1. Prerequisites
+## Tech Stack
 
-Before you begin, make sure you have:
+| Concern | Tool |
+|---|---|
+| Build | Vite |
+| UI | React 19 + Tailwind CSS v4 |
+| Routing | React Router v7 |
+| Server state | TanStack React Query v5 |
+| Client state | React Context + useReducer |
+| Testing | Vitest + React Testing Library |
+| Mock API | Express (local) |
 
-- **Node.js 18+** installed
-- **npm** (comes with Node)
+---
 
-You can check your versions with:
+## Features
+
+- **Product catalog** — Responsive grid with loading, error, and empty states
+- **Product detail** — Image, description, price, quantity selector, Add to Cart
+- **Shopping cart** — Add / update qty / remove items, computed subtotal, persisted to `localStorage`
+- **Auth flow** — Frontend mock login, session persisted to `sessionStorage`
+- **Protected routes** — Checkout requires login; redirects back after sign-in
+- **Checkout** — Order summary + customer info form → `POST /api/orders` → confirmation page
+- **Fully tested** — 11 unit tests (cartReducer) + 4 integration tests (add-to-cart flow)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm (bundled with Node)
 
 ```bash
 node -v
 npm -v
 ```
 
----
+### Installation
 
-## 2. Getting Started
+```bash
+npm install
+```
 
-1. **Install dependencies**
+### Run the app
 
-   From the root of the starter project:
+You need **two terminals**:
 
-   ```bash
-   npm install
-   ```
-
-2. **Start the mock API server**
-
-   The project includes a small Express server that serves product data and accepts orders.  
-   In one terminal:
-
-   ```bash
-   npm run dev:api
-   ```
-
-   By default, this starts the API on:
-
-   ```text
-   http://localhost:5174
-   ```
-
-3. **Start the React app**
-
-   In **another** terminal:
-
-   ```bash
-   npm run dev
-   ```
-
-   Vite will print a local development URL, usually:
-
-   ```text
-   http://localhost:5173
-   ```
-
-4. **View the starter app**
-
-   Open the Vite URL in your browser. You should see:
-
-   - A simple page titled **React Retail**
-   - A grid of products (title, category, price, and image)
-
-This is your baseline. From here, you will evolve this simple view into a full-featured capstone project.
-
----
-
-## 3. Mock API Overview
-
-The mock API lives in `api/server.js` and is started with:
-
+**Terminal 1 — Mock API (port 5174):**
 ```bash
 npm run dev:api
 ```
 
-You do **not** need to modify this file for the project, but you should know what endpoints are available.
-
-All endpoints are prefixed with `/api`:
-
-### `GET /api/products`
-
-Returns an array of products. Each product looks roughly like:
-
-```json
-{
-  "id": 1,
-  "title": "React Retail T-Shirt",
-  "price": 19.99,
-  "description": "A comfy tee for frontend devs.",
-  "image": "https://placehold.co/300x200?text=React+Retail+T-Shirt",
-  "category": "Apparel"
-}
+**Terminal 2 — React app (port 5173):**
+```bash
+npm run dev
 ```
 
-### `GET /api/products/:id`
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-Returns a single product by its numeric ID.
-
-- Responds with `404` if the product is not found.
-
-### `POST /api/orders`
-
-Accepts an order payload and returns a created order object.
-
-Example request body:
-
-```json
-{
-  "items": [
-    { "id": 1, "title": "React Retail T-Shirt", "price": 19.99, "quantity": 2 }
-  ],
-  "customer": {
-    "name": "Jane Doe",
-    "email": "jane@example.com",
-    "address": "123 Main St"
-  }
-}
-```
-
-Example response:
-
-```json
-{
-  "id": 1,
-  "items": [...],
-  "customer": { ... },
-  "status": "confirmed",
-  "createdAt": "2025-01-01T00:00:00.000Z"
-}
-```
-
-The API is purely in-memory—orders are **not** persisted between runs.
+> The API server must be running for products to load and orders to submit.
 
 ---
 
-## 4. What the Starter Code Includes
+## Demo Credentials
 
-At a high level, the starter code provides:
+The login page uses frontend-only mock authentication.
 
-- A minimal React app (`src/main.jsx`, `src/App.jsx`)
-- Basic styling with Tailwind CSS (`src/index.css`)
-- A working **product grid** that:
-  - Calls `http://localhost:5174/api/products` with `fetch`
-  - Displays the products in a simple layout
-
-The starter does **not** include:
-
-- Routing (`react-router-dom`)
-- Global state management for a cart or auth
-- React Query hooks or configuration
-- Auth logic or protected routes
-- Cart page, product detail page, or checkout page
-- Any tests (unit or integration)
-
-You will add all of these as part of the project.
+| Field | Value |
+|---|---|
+| Email | `demo@example.com` |
+| Password | `password` |
 
 ---
 
-## 5. Your Tasks (High-Level)
+## Testing
 
-Using this starter, you will build out a complete React Retail experience. At a high level, you will:
+```bash
+npm test
+```
 
-1. **Design and implement the app structure**
+Runs all tests once (Vitest in run mode). To run in watch mode:
 
-   - Add routing (e.g., catalog, product detail, cart, checkout, login).
-   - Decide how to organize your components and pages.
+```bash
+npx vitest
+```
 
-2. **Handle server state**
+### Test breakdown
 
-   - Move beyond a simple `fetch` call.
-   - Use tools such as **React Query** to manage products and orders as server state.
-   - Handle loading and error states appropriately.
-
-3. **Implement cart functionality**
-
-   - Allow users to add items to a cart, update quantities, and remove items.
-   - Keep cart state consistent across the app (e.g., via React Context and/or other global state patterns).
-
-4. **Implement authentication and protected routes**
-
-   - Add a basic login flow (no real backend auth required).
-   - Track whether a user is “logged in.”
-   - Protect the checkout route so only logged-in users can access it.
-
-5. **Implement the checkout flow**
-
-   - Create a checkout page that:
-     - Shows the items in the cart and a summary.
-     - Collects basic customer information.
-     - Submits an order to `POST /api/orders`.
-   - Show a confirmation view when an order is successfully placed.
-
-6. **Add testing**
-
-   - Add at least one **unit test** (e.g., for cart logic or a utility function).
-   - Add at least one **integration test** (e.g., simulating an “add to cart” flow).
-
-7. **Refine the UI**
-   - Improve styling and layout as needed.
-   - Make thoughtful UX decisions that match the project requirements and rubric.
-
-Refer to the course content and project rubric for detailed requirements and expectations.
+| File | Type | Coverage |
+|---|---|---|
+| `src/test/cartReducer.test.js` | Unit | ADD_ITEM (new + duplicate merge), REMOVE_ITEM, UPDATE_QUANTITY (incl. zero/negative), CLEAR_CART, unknown action |
+| `src/test/AddToCart.test.jsx` | Integration | Product loads, cart starts empty, Add to Cart updates count, double-add accumulates quantity |
 
 ---
 
-## 6. Notes
+## Project Structure
 
-- You are free to choose your own file and folder structure.
-- The starter code is intentionally minimal to give you room to design your own solution.
-- The provided mock API is intended to help you focus on the **React** side of the project. You do not need to build or host your own backend.
+```
+src/
+├── api/
+│   ├── products.js        # getProducts(), getProductById()
+│   └── orders.js          # submitOrder()
+├── components/
+│   ├── EmptyState.jsx
+│   ├── ErrorMessage.jsx
+│   ├── LoadingSpinner.jsx
+│   ├── Navbar.jsx
+│   └── ProtectedRoute.jsx
+├── context/
+│   ├── AuthContext.jsx    # useReducer — LOGIN / LOGOUT, sessionStorage
+│   └── CartContext.jsx    # useReducer — ADD_ITEM / REMOVE_ITEM / UPDATE_QUANTITY / CLEAR_CART, localStorage
+├── pages/
+│   ├── ProductsPage.jsx
+│   ├── ProductDetailPage.jsx
+│   ├── CartPage.jsx
+│   ├── LoginPage.jsx
+│   ├── CheckoutPage.jsx
+│   └── OrderConfirmationPage.jsx
+├── test/
+│   ├── setup.js
+│   ├── cartReducer.test.js
+│   └── AddToCart.test.jsx
+├── App.jsx                # Routes + providers
+└── main.jsx
+api/
+└── server.js              # Express mock API
+```
 
-Good luck, and have fun building your React Retail application!
+---
+
+## Architecture Notes
+
+**Client state** (cart, auth) is managed with React Context + `useReducer` — predictable, action-based transitions that are easy to test in isolation.
+
+**Server state** (products, order submission) is managed with TanStack React Query — handles caching, loading/error states, and deduplication automatically.
+
+**Cart persistence** — cart items survive page refresh via `localStorage`. Auth session survives refresh via `sessionStorage` (clears on tab close).
+
+**Protected routes** — `ProtectedRoute` wraps the `/checkout` and `/order-confirmation` routes. Unauthenticated users are redirected to `/login?returnTo=<path>` and returned after a successful login.
+
+---
+
+## Mock API Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/products` | List all products |
+| `GET` | `/api/products/:id` | Single product by ID |
+| `POST` | `/api/orders` | Submit an order |
+
+---
+
+## License
+
+[License](LICENSE.txt)
